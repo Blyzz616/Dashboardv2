@@ -64,7 +64,6 @@ function getUviClass($uvi) {
 
 $uvi_class = getUviClass($uvi);
 
-
 // Path to the moon phase file
 $moonPhaseFile = 'current/moon-phase.txt';
 
@@ -82,6 +81,44 @@ if (strlen($moonPhaseDigits) === 1) {
 
 // Path to the moon phase image
 $moonPhaseImage = "img/moon/{$moonPhaseDigits}.png";
+
+// Database
+// Connextion Details
+$servername = ""; // Server address where databae is located
+$username = ""; // User that has read access to the relevant table
+$password = ""; // That user's password
+$dbname = ""; // Name of the database being accessd
+$table = ""; // name of the table in the database being called
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+  die("Connection failed: " . mysqli_connect_error());
+}
+
+// SQL query: most recent row within last 6 hours
+$sql = "SELECT id, timestamp, percent FROM " . $table . " WHERE timestamp >= NOW() - INTERVAL 6 HOUR ORDER BY timestamp DESC LIMIT 1";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result && mysqli_num_rows($result) === 1) {
+    $row = mysqli_fetch_assoc($result);
+    $percent = $row["percent"] . "%";
+    if ($row["percent"] > 60) {
+        $alertstyle = "high";
+    } elseif ($row["percent"] < 40) {
+        $alertstyle = "low";
+    } else {
+        $alertstyle = "goldilocks";
+   }
+} else {
+    $percent = "Check Sensor!";
+}
+
+// Close the connection
+mysqli_close($conn);
 
 // Output HTML content
 ?>
@@ -109,23 +146,25 @@ $moonPhaseImage = "img/moon/{$moonPhaseDigits}.png";
       ?>
       </div>
         <div class="weather-container">
-          <div id="temp"><?php $formatted_temp = number_format($temp, 1); echo $formatted_temp; ?>&deg;</div>
+          <div class="sunny-side">
+            <div class="temp"><?php $formatted_temp = number_format($temp, 1); echo $formatted_temp; ?>&deg;</div>
+            <div>
+              <table class="undertemp">
+                <tr>
+                  <td class="table-left">Humidity: <span id="humidity"><?php echo $humidity; ?></span>%</td>
+                  <td class="table-right">UVI: <span id="uvi" class="<?php echo $uvi_class; ?>"><?php  $formatted_uvi = number_format($uvi, 1); echo $formatted_uvi; ?></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
           <div id="additional-info">
             <div class="mono" id="weather"><?php echo $description; ?></div>
             <table id="weathertab">
               <tr>
-                <td>Humidity: <span id="humidity"><?php echo $humidity; ?></span>%</td>
-                <td>UVI: <span id="uvi" class="<?php echo $uvi_class; ?>"><?php  $formatted_uvi = number_format($uvi, 1); echo $formatted_uvi; ?></span></td>
-              </tr>
-              <tr>
-		<td colspan="2">Wind: <span id="wind-speed" data-direction="<?php echo $wind_direction; ?>"><?php echo $wind_speed; ?></span> m/s &nbsp;&nbsp;&nbsp;&nbsp;<span class="weathervane">c</span></td>
-                <!--<td colspan="2">Wind: <span id="wind-speed"><?php echo $wind_speed; ?></span> m/s <span class="weathervane"> c </span></td>-->
+                <td>Lemon Moisture:<br><span <?php echo "class=\"" . $alertstyle . "\">" . $percent ?></span></td>
+                <td><span class="weathervane">c</span><br><span id="wind-speed" data-direction="<?php echo $wind_direction; ?>"><?php echo $wind_speed; ?></span> m/s</td>
               <tr/>
             </table>
-              <!--<li>Humidity: <span id="humidity"><?php echo $humidity; ?></span>%</li>
-              <li>Wind: <span id="wind-speed"><?php echo $wind_speed; ?></span> m/s <?php echo $wind_deg; ?></li>
-              <li>UVI: <span id="uvi" class="<?php echo $uvi_class; ?>"><?php  $formatted_uvi = number_format($uvi, 1); echo $formatted_uvi; ?></span></li>
-              <li>Pressure: <span id="pressure"><?php echo $pressure; ?> hPa</span></li>-->
           </div>
         </div>
       </div>
