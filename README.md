@@ -1,4 +1,6 @@
-#  Creating a new Dashboard
+#  Improving my Dashboard
+
+I'm going to keep all the old comments for now - I might fix README up at some point - the important part is in the code.
 
 This is being run on one of my home servers that will one day grow up and turn into Jarvis.
 
@@ -9,7 +11,9 @@ However, I've got a few ESP32 boards that need to be put into service to report 
 Right now though, I'm just warming up!
 
 Currently looking like this:  
-![image](https://github.com/user-attachments/assets/b147a971-33ea-40a6-a663-8b7bb2e9aa56)
+<img width="1388" height="816" alt="image" src="https://github.com/user-attachments/assets/0321ec34-4dd4-4095-9484-2f1ce2c27860" />
+
+Most recent addition: The lemon tree soil moisture reading.
 
 Now with 7-day forecast and moon position!
 
