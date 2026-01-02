@@ -309,7 +309,19 @@ function updateNightShade() {
   const shade = document.querySelector('.shade');
   if (!shade) return;
 
-  const hour = new Date().getHours();
+  const now = new Date();
+  const hour = now.getHours();
+
+  // Disable shade ONLY on Dec 31 between 21:00–23:59
+  const isDec31 = now.getMonth() === 11 && now.getDate() === 31;
+  const isBlockedTime = isDec31 && hour >= 21;
+
+  if (isBlockedTime) {
+    shade.style.display = 'none';
+    shade.style.opacity = '0';
+    return;
+  }
+
   const isNight = hour >= 22 || hour < 6; // 10 PM to 6 AM
 
   if (isNight) {
