@@ -84,11 +84,10 @@ $moonPhaseImage = "img/moon/{$moonPhaseDigits}.png";
 
 // Database
 // Connextion Details
-$servername = ""; // Server address where databae is located
-$username = ""; // User that has read access to the relevant table
-$password = ""; // That user's password
-$dbname = ""; // Name of the database being accessd
-$table = ""; // name of the table in the database being called
+$servername = "";
+$username = "";
+$password = "";
+$dbname = "home";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -99,7 +98,7 @@ if (!$conn) {
 }
 
 // SQL query: most recent row within last 6 hours
-$sql = "SELECT id, timestamp, percent FROM " . $table . " WHERE timestamp >= NOW() - INTERVAL 6 HOUR ORDER BY timestamp DESC LIMIT 1";
+$sql = "SELECT id, timestamp, percent FROM citrine WHERE timestamp >= NOW() - INTERVAL 6 HOUR ORDER BY timestamp DESC LIMIT 1";
 
 $result = mysqli_query($conn, $sql);
 
@@ -119,6 +118,7 @@ if ($result && mysqli_num_rows($result) === 1) {
 
 // Close the connection
 mysqli_close($conn);
+
 
 // Output HTML content
 ?>
@@ -161,7 +161,12 @@ mysqli_close($conn);
             <div class="mono" id="weather"><?php echo $description; ?></div>
             <table id="weathertab">
               <tr>
-                <td>Lemon Moisture:<br><span <?php echo "class=\"" . $alertstyle . "\">" . $percent ?></span></td>
+                <td>
+                  Lemon Moisture:<br>
+                  <span id="lemon-moisture" class="<?php echo $alertstyle; ?>">
+                    <?php echo $percent; ?>
+                  </span>
+                </td>
                 <td><span class="weathervane">c</span><br><span id="wind-speed" data-direction="<?php echo $wind_direction; ?>"><?php echo $wind_speed; ?></span> m/s</td>
               <tr/>
             </table>
