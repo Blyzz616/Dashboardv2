@@ -26,7 +26,7 @@ if ($result && mysqli_num_rows($result) === 1) {
     $row = mysqli_fetch_assoc($result);
     $style =
         ($row['percent'] > 60) ? 'high' :
-        (($row['percent'] < 40) ? 'low' : 'goldilocks');
+        (($row['percent'] < 42) ? 'low' : 'goldilocks');
 
     echo json_encode([
         "percent" => $row['percent'],
