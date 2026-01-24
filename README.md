@@ -13,7 +13,27 @@ Right now though, I'm just warming up!
 Currently looking like this:  
 <img width="1388" height="816" alt="image" src="https://github.com/user-attachments/assets/0321ec34-4dd4-4095-9484-2f1ce2c27860" />
 
-Most recent addition: The lemon tree soil moisture reading.
+Most recent addition: New graph!
+
+I was using this:  
+<img width="656" height="300" alt="image" src="https://github.com/user-attachments/assets/36194807-4196-40f0-9669-fb0b045d7f3c" />
+
+Which has worked. I've tried getting the termperature below to be blue and above red. But I just couldn't get it to work nicely with gnuplot.
+
+So, I've decided to outsource the actual image (.svg) generation to [YR.no](https://yr.no). They have a really nice graph:  
+<img width="774" height="380" alt="image" src="https://github.com/user-attachments/assets/aafb0cdc-9683-483a-9463-264bd05618fc" />
+
+Problem is that I've created this dashboard to be quite dark, intentionally. The best part though, is that YR.no very kindly provides a free to use SVG download on their site.   
+
+Why is it good? The image "SVG" is not actaully an image, it's text-based set of instrucations to draw an image with coordiantes, vectors, colours, shapes, etc.  
+So you have a white background? `#ffffff` no problem do a `sed` replace from `#ffffff` to `#000000`! or even better yet, make the background transparent with `style="background-color:transparent"`! Winning!
+
+ALso a few of the other colours worked really well with a white background, but not so much with black, so I did a few more replacements. Also, the branding was just taking up too much space, as were the other small details like the location name.
+
+`xmlstarlet` to the rescue! As SVG is xml-based, you can perform deletions and replacements quite easily, so I used `xmlstarlet` and `sed` to do the heavy lifting. Now it looks like this:  <img width="856" height="318" alt="image" src="https://github.com/user-attachments/assets/9a37c7bd-4b1c-4620-b7e6-d4c182dc3557" />
+
+It's missing the precp, but I'm still worlking on it!
+
 
 Now with 7-day forecast and moon position!
 
